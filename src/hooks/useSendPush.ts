@@ -18,7 +18,7 @@ const useSendPush = () => {
     title,
     body,
     click_action,
-    image = "/logos/favicon-196x196.png", // 기본 이미지
+    image = "icons/icon512_rounded.png", // 기본 이미지
   }: PushOptions) => {
     setLoading(true);
     setError(null);
