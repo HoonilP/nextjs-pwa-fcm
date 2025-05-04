@@ -41,9 +41,20 @@ export default function Home() {
 		});
 	}
 
+	const handleRequestPermission = () => {
+		Notification.requestPermission().then((permission) => {
+			if (permission !== 'granted') {
+				alert('푸시 거부됨');
+			} else {
+				alert('푸시 승인됨');
+			}
+		})
+	}
+
 	return (
-		<div>
-			<Button onClick={handleGetToken}>토큰 발급</Button>
+		<div className="h-screen flex justify-center items-center">
+			<Button onClick={handleRequestPermission} className="text-white bg-red-900">Request Permission</Button>
+			<Button onClick={handleGetToken} className="text-white bg-red-900">토큰 발급</Button>
 		</div>
 	);
 }

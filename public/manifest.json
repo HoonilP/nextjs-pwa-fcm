@@ -21,6 +21,6 @@
     "lang": "ko-KR",
     "name": "너의 내역은",
     "short_name": "너의 내역은",
-    "start_url": "/home",
+    "start_url": "/",
     "scope": "/"
 }
