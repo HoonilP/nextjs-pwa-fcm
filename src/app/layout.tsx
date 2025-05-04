@@ -1,6 +1,13 @@
+// Components: CSS
+import "./globals.css";
+
+// Components: UI
+import { Toaster } from "@/components/ui/sonner"
+
+// React
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -21,9 +28,7 @@ export const viewport: Viewport = {
 	themeColor: "#fff",
 };
 
-export default function RootLayout({
-	children,
-}: Readonly<{
+export default function RootLayout({ children }: Readonly<{
 	children: React.ReactNode;
 }>) {
 	return (
@@ -34,6 +39,7 @@ export default function RootLayout({
 			</head>
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 				{children}
+				<Toaster />
 			</body>
 		</html>
 	);

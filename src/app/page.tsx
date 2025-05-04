@@ -1,9 +1,15 @@
 'use client';
 
+// Components: UI
 import { Button } from "@/components/ui/button";
-import { getMessaging, getToken } from "firebase/messaging";
+
+// Firebase
 import { db } from "@/lib/firebase";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { getMessaging, getToken } from "firebase/messaging";
+
+// React
+import Link from "next/link";
 
 export default function Home() {
 	const uploadToken = async (currentToken: string) => {
@@ -25,12 +31,13 @@ export default function Home() {
 		const messaging = getMessaging();
 
 		getToken(messaging, {
-			vapidKey: "BFEQZonyqygHNGMuttPdcuPc0y6LhYVpKPEQOPRV4SWwIrwLpXc1KMrb7qKjwitlxAjKsyl-MYEZDS2I671aQMk",
+			vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
 		}).then(async (currentToken) => {
 			if (!currentToken) {
+				alert('토큰 발급 실패');
 			} else {
-				console.log(currentToken)
-				uploadToken(currentToken)
+				uploadToken(currentToken);
+				alert('토큰 발급 성공');
 			}
 		}).catch((error) => {
 			console.log(error)
@@ -51,6 +58,8 @@ export default function Home() {
 		<div className="h-screen flex justify-center items-center">
 			<Button onClick={handleRequestPermission} className="text-white bg-red-900">Request Permission</Button>
 			<Button onClick={handleGetToken} className="text-white bg-red-900">토큰 발급</Button>
+
+			<Link href="/admin">Admin Page</Link>
 		</div>
 	);
 }
