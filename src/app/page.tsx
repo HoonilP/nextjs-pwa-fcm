@@ -10,17 +10,15 @@ export default function Home() {
 		const docRef = doc(db, "subscribe", "tokens");
 		await updateDoc(docRef, {
 			list: arrayUnion(currentToken),
-		})
-			.then(() => {
-				localStorage.setItem("notificationPermission", "true");
-			})
-			.catch((error) => {
-				console.log(error);
-				window.alert(
-					"서버 연결에 실패하였습니다.\n잠시 후 다시 시도해 주세요."
-				);
-				return;
-			});
+		}).then(() => {
+			localStorage.setItem("notificationPermission", "true");
+		}).catch((error) => {
+			console.log(error);
+			window.alert(
+				"서버 연결에 실패하였습니다.\n잠시 후 다시 시도해 주세요."
+			);
+			return;
+		});
 	};
 
 	const handleGetToken = () => {
@@ -28,15 +26,13 @@ export default function Home() {
 
 		getToken(messaging, {
 			vapidKey: "BFEQZonyqygHNGMuttPdcuPc0y6LhYVpKPEQOPRV4SWwIrwLpXc1KMrb7qKjwitlxAjKsyl-MYEZDS2I671aQMk",
-		})
-		.then(async (currentToken) => {
+		}).then(async (currentToken) => {
 			if (!currentToken) {
 			} else {
 				console.log(currentToken)
 				uploadToken(currentToken)
 			}
-		})
-		.catch((error) => {
+		}).catch((error) => {
 			console.log(error)
 		});
 	}

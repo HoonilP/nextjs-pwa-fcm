@@ -20,16 +20,12 @@ self.addEventListener("push", function (event) {
 			icon: data.image,
 			image: data.image,
 			vibrate: [200, 100, 200],
-			data: {
-				click_action: data.click_action,
-			},
+			data: { click_action: data.click_action, },
 		};
 
-		event.waitUntil(
-			self.registration.showNotification(data.title, options)
-		);
+		event.waitUntil( self.registration.showNotification(data.title, options) );
 	} else {
-		console.log("This push event has no data.");
+		alert("This push event has no data.");
 	}
 });
 
