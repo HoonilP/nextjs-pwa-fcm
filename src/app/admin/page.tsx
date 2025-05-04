@@ -31,7 +31,7 @@ export default function AdminPushPage() {
 				setBody("");
 				setUrl("/");
 			} else {
-				alert("푸시 알림 발송에 실패했습니다.");
+				alert(`푸시 알림 발송에 실패했습니다.\n${result.result}`);
 			}
 		} catch (err) {
 			console.error("푸시 발송 오류:", err);
