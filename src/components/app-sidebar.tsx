@@ -1,7 +1,7 @@
 "use client"
 
 // Components: Icons
-import { Users, PenLine, MessageCircle, Folders, Search, CalendarClock, Calendar, MapPinCheckInside, HousePlus, UserRoundPlus } from "lucide-react"
+import { PenLine, MessageCircle, ListChecks, Search, ShieldUser } from "lucide-react"
 
 // Components: UI
 import { NavMain } from "@/components/nav-main"
@@ -27,7 +27,7 @@ const data = {
 		{
 			title: "요청 승인",
 			url: "#",
-			icon: PenLine,
+			icon: ListChecks,
 			items: [
 				{ title: "학생회 가입 요청", url: "/approve/council" },
 				{ title: "학생 가입 요청", url: "/approve/student" },
@@ -42,7 +42,7 @@ const data = {
 		{
 			title: "등록",
 			url: "#",
-			icon: Search,
+			icon: PenLine,
 			items: [
 				{ title: "테마 등록", url: "/registration/theme" },
 				{ title: "입금 내역 등록", url: "/registration/credit" },
@@ -54,7 +54,7 @@ const data = {
 		{
 			title: "회원 조회",
 			url: "#",
-			icon: Calendar,
+			icon: Search,
 			items: [
 				{ title: "학생회 조회", url: "/search/council" },
 				{ title: "학생 조회", url: "/search/student" },
@@ -63,13 +63,21 @@ const data = {
 		{
 			title: "입출금 내역 조회",
 			url: "#",
-			icon: CalendarClock,
+			icon: Search,
 			items: [
 				{ title: "전체 내역", url: "/search/all" },
 				{ title: "입금 내역", url: "/search/credit" },
 				{ title: "출금 내역", url: "/search/debit" },
 				{ title: "나의 내역", url: "/search/personal" },
 				{ title: "테마별 내역", url: "/search/theme" },
+			],
+		},
+		{
+			title: "Admin",
+			url: "#",
+			icon: ShieldUser,
+			items: [
+				{ title: "Push 알림 테스트", url: "/admin" },
 			],
 		},
 	],
