@@ -7,7 +7,7 @@ import { PenLine, MessageCircle, ListChecks, Search, ShieldUser } from "lucide-r
 import { NavMain } from "@/components/nav-main"
 import { NavManagements } from "@/components/nav-management"
 import { NavUser } from "@/components/nav-user"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, SidebarTrigger } from "@/components/ui/sidebar"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
 
 // Context
 import { useUser } from "@/context/UserProvider"
@@ -120,7 +120,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				<NavManagements menus={filteredMenus} />
 			</SidebarContent>
 
-			<SidebarTrigger className="ml-2.5" />
 			<SidebarFooter>
 				<NavUser username={username} userRole={userRole} />
 			</SidebarFooter>
