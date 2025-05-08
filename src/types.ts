@@ -59,6 +59,10 @@ export interface JwtData extends JwtPayload {
     iat: number;
 }
 
+export interface ChatProps {
+    channelUrl: string;
+}
+
 // // Enum
 // export enum LoanTypeEnum {
 // 	special_loan,
