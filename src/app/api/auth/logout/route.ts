@@ -5,6 +5,12 @@ export async function GET() {
     const cookieStore = await cookies();
     const credentials = cookieStore.get('access_token')?.value;
 
+    if (credentials === 'admin') {
+        cookieStore.delete('access_token');
+        cookieStore.delete('refresh_token');
+        return NextResponse.json({ ok: true })
+    }
+
     const response = await fetch(`${process.env.API_SERVER_URL}/auth/logout`, {
         method: 'POST',
         headers: {

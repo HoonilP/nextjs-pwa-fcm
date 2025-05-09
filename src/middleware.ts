@@ -6,61 +6,65 @@ import { jwtDecode } from "jwt-decode";
 export async function middleware(request: NextRequest) {
     console.log("Middleware: start");
 
-    // if (request.nextUrl.pathname === '/signin') {
-    //     return NextResponse.next();
-    // }
+    if (request.nextUrl.pathname === '/signin') {
+        return NextResponse.next();
+    }
 
-    // const cookieStore = await cookies();
+    const cookieStore = await cookies();
 
-    // const accessToken = request.cookies.get("access_token")?.value;
-    // const refreshToken = request.cookies.get("refresh_token")?.value;
+    const accessToken = request.cookies.get("access_token")?.value;
+    const refreshToken = request.cookies.get("refresh_token")?.value;
 
-    // const now = Math.floor(Date.now() / 1000);
+    if (accessToken === 'admin' && refreshToken === 'admin') {
+        console.log('You are Admin! :)');
+        return NextResponse.next();
+    }
 
-    // if (accessToken) {
-    //     const accessExp = getExpirationTime(accessToken);
+    const now = Math.floor(Date.now() / 1000);
+    if (accessToken) {
+        const accessExp = getExpirationTime(accessToken);
 
-    //     if (accessExp < now) {
-    //         if (!refreshToken) {
-    //             console.log("No refresh token. Redirecting to login.");
-    //             cookieStore.delete('access_token');
-    //             cookieStore.delete('refresh_token');
-    //             return NextResponse.redirect(new URL("/signin", request.url));
-    //         }
+        if (accessExp < now) {
+            if (!refreshToken) {
+                console.log("No refresh token. Redirecting to login.");
+                cookieStore.delete('access_token');
+                cookieStore.delete('refresh_token');
+                return NextResponse.redirect(new URL("/signin", request.url));
+            }
 
-    //         const refreshExp = getExpirationTime(refreshToken);
-    //         if (refreshExp < now) {
-    //             console.log("Refresh token expired. Redirecting to login.");
-    //             cookieStore.delete('access_token');
-    //             cookieStore.delete('refresh_token');
-    //             return NextResponse.redirect(new URL("/signin", request.url));
-    //         }
+            const refreshExp = getExpirationTime(refreshToken);
+            if (refreshExp < now) {
+                console.log("Refresh token expired. Redirecting to login.");
+                cookieStore.delete('access_token');
+                cookieStore.delete('refresh_token');
+                return NextResponse.redirect(new URL("/signin", request.url));
+            }
 
-    //         const success = await rotateAccessToken(refreshToken);
-    //         if (!success) {
-    //             console.log("Token rotation failed. Redirecting to login.");
-    //             cookieStore.delete('access_token');
-    //             cookieStore.delete('refresh_token');
-    //             return NextResponse.redirect(new URL("/signin", request.url));
-    //         }
-    //     }
-    // } else if (refreshToken) {
-    //     const success = await rotateAccessToken(refreshToken);
-    //     if (!success) {
-    //         console.log("Token rotation failed. Redirecting to login.");
-    //         cookieStore.delete('access_token');
-    //         cookieStore.delete('refresh_token');
-    //         return NextResponse.redirect(new URL("/signin", request.url));
-    //     }
-    // } else {
-    //     console.log("No tokens found. Redirecting to login.");
-    //     cookieStore.delete('access_token');
-    //     cookieStore.delete('refresh_token');
-    //     return NextResponse.redirect(new URL("/signin", request.url));
-    // }
+            const success = await rotateAccessToken(refreshToken);
+            if (!success) {
+                console.log("Token rotation failed. Redirecting to login.");
+                cookieStore.delete('access_token');
+                cookieStore.delete('refresh_token');
+                return NextResponse.redirect(new URL("/signin", request.url));
+            }
+        }
+    } else if (refreshToken) {
+        const success = await rotateAccessToken(refreshToken);
+        if (!success) {
+            console.log("Token rotation failed. Redirecting to login.");
+            cookieStore.delete('access_token');
+            cookieStore.delete('refresh_token');
+            return NextResponse.redirect(new URL("/signin", request.url));
+        }
+    } else {
+        console.log("No tokens found. Redirecting to login.");
+        cookieStore.delete('access_token');
+        cookieStore.delete('refresh_token');
+        return NextResponse.redirect(new URL("/signin", request.url));
+    }
 
-    // console.log("Middleware: end");
-    // return NextResponse.next();
+    console.log("Middleware: end");
+    return NextResponse.next();
 }
 
 function getExpirationTime(token: string): number {
@@ -78,9 +82,9 @@ async function rotateAccessToken(refreshToken: string) {
         const response = await fetch(`${process.env.API_SERVER_URL}/api/auth/reissue`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({refreshToken: refreshToken}),
+            body: JSON.stringify({ refresh: refreshToken }),
         });
-        
+
         if (!response.ok) {
             console.error("Failed to rotate access token:", response.status);
             return false;
@@ -108,6 +112,6 @@ async function rotateAccessToken(refreshToken: string) {
 export const config = {
     matcher: [
         "/signin/:path*",
-        // "/home/:path*",
+        "/home/:path*",
     ],
 };

@@ -10,9 +10,27 @@ import { jwtDecode } from "jwt-decode";
 import { z } from "zod";
 
 export async function signin(_: unknown, formData: FormData): Promise<serverActionMessage> {
+    const cookieStore = await cookies();
+
     const data = {
         studentId: formData.get('studentId'),
         password: formData.get('password'),
+    }
+
+    // ===================== Admin: Test용 =====================
+    if (data.studentId === 'admin' && data.password === 'Dkssudgktpdy12!') {
+        cookieStore.set({
+            name: 'access_token',
+            value: 'admin',
+            expires: new Date(Date.now() + 600 * 60 * 1000) // 한국: GMT +9 = 9*60*60
+        });
+        cookieStore.set({
+            name: 'refresh_token',
+            value: 'admin',
+            expires: new Date(Date.now() + 600 * 60 * 1000)// 한국: GMT +9 = 9*60*60
+        });
+
+        redirect('/home');
     }
 
     try {
@@ -31,10 +49,7 @@ export async function signin(_: unknown, formData: FormData): Promise<serverActi
         };
     }
 
-    console.log(`studentId: ${data.studentId}`)
-    console.log(`password: ${data.password}`)
     const credentials = btoa(`${data.studentId}:${data.password}`);
-
     const response = await fetch(`${process.env.API_SERVER_URL}/login`, {
         method: 'POST',
         headers: {
@@ -54,7 +69,6 @@ export async function signin(_: unknown, formData: FormData): Promise<serverActi
     // 'use server'; 때문에 쿠키가 client로 저장되지 않음
     const cookieList = response.headers.getSetCookie().map((v) => v.slice(0, v.indexOf(' ') - 1).split('='));
 
-    const cookieStore = await cookies();
     for (const cookieInfo of cookieList) {
         const decoded: JwtData = jwtDecode(cookieInfo[1]);
         cookieStore.set({
@@ -64,7 +78,7 @@ export async function signin(_: unknown, formData: FormData): Promise<serverActi
         });
     }
 
-    redirect('/');
+    redirect('/home');
 }
 
 export async function signup(_: unknown, formData: FormData): Promise<serverActionMessage> {

@@ -8,6 +8,7 @@ import { SignUpForm } from "./form"
 
 // React
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Page() {
 	return (
@@ -29,6 +30,12 @@ export default function Page() {
 						<SignUpForm />
 					</CardContent>
 				</Card>
+
+				<div className="flex justify-center mt-4">
+					<Link href="/signin" className="text-blue-500 underline hover:text-blue-700">
+						이미 회원이라면?
+					</Link>
+				</div>
 			</div>
 		</div>
 	)
