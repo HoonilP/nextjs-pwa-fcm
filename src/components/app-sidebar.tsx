@@ -17,6 +17,9 @@ import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 
+// Types
+import { userRoleEnum } from "@/types"
+
 const data = {
 	navMain: [
 		// -- 승인 --
@@ -96,7 +99,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			return {
 				...nav,
 				items: nav.items.filter(item =>
-					userRole === 0 || item.title !== "Registration"
+					userRole === userRoleEnum.ROLE_COMMITTEE || item.title !== "Registration"
 				),
 			};
 		}
@@ -104,7 +107,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	});
 
 	const filteredMenus = data.menus.filter(
-		menu => userRole !== 1 || !["User", "HR", "Report"].includes(menu.name)
+		menu => userRole !== userRoleEnum.ROLE_STUDENT || !["User", "HR", "Report"].includes(menu.name)
 	);
 
 	return (

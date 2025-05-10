@@ -14,9 +14,12 @@ import { LogOut } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
+// Types
+import { userRoleEnum } from "@/types"
+
 export function NavUser({ username, userRole }: {
 	username: string;
-	userRole: number;
+	userRole: userRoleEnum;
 }) {
 	// Router Handler
 	const router = useRouter();
@@ -42,13 +45,13 @@ export function NavUser({ username, userRole }: {
 		<SidebarMenu>
 			<SidebarMenuItem>
 				<SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-					{userRole === 0 ? (
+					{userRole === userRoleEnum.ROLE_COMMITTEE ? (
 						<Avatar className="h-8 w-[60px] rounded-lg">
 							<AvatarFallback className="rounded-lg bg-black text-white">
 								학생회
 							</AvatarFallback>
 						</Avatar>
-					) : userRole === 1 ? (
+					) : userRole === userRoleEnum.ROLE_STUDENT ? (
 						<Avatar className="h-8 w-[50px] rounded-lg">
 							<AvatarFallback className="rounded-lg bg-black text-white">
 								학생
