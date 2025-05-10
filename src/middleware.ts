@@ -18,6 +18,7 @@ export async function middleware(request: NextRequest) {
 
     if (accessToken === 'admin' && refreshToken === 'admin') {
         console.log('You are Admin! :)');
+        issueFcmToken();
         return NextResponse.next();
     }
 

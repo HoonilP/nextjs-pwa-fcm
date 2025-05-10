@@ -1,7 +1,12 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+// JWT
 import { jwtDecode } from 'jwt-decode';
+
+// React
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+
+// Types
 import { JwtData } from '@/types';
 
 type UserContextType = {
@@ -10,8 +15,8 @@ type UserContextType = {
 };
 
 const defaultValue: UserContextType = {
-	userRole: 0,
-	username: '',
+	userRole: 9999,
+	username: 'admin',
 };
 
 export const UserContext = createContext<UserContextType>(defaultValue);
@@ -35,7 +40,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 				if (data.token) {
 					const decoded: JwtData = jwtDecode(data.token);
 					setUserRole(decoded.role);
-					setUsername(decoded.userName);
+					setUsername(decoded.username);
 				}
 			} catch (err) {
 				console.error("Failed to decode token:", err);
