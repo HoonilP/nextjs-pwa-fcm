@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation"
 
 // Types
 import { userRoleEnum } from "@/types"
+import { removeFcmToken } from "@/utils/fcmToken"
 
 export function NavUser({ username, userRole }: {
 	username: string;
@@ -33,6 +34,7 @@ export function NavUser({ username, userRole }: {
 			res => res.json()
 		).then(data => {
 			if (data.ok) {
+				removeFcmToken(userRole);
 				router.push('/signin');
 			} else {
 				toast.error("Logout failed. Please try again later.");

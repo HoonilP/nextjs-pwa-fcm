@@ -3,7 +3,6 @@
 // Credentials
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
-import { issueFcmToken } from '@/utils/fcmToken';
 
 // Types
 import { signinFormSchema, signupFormSchema, JwtData, serverActionMessage } from "@/types";
@@ -30,11 +29,6 @@ export async function signin(_: unknown, formData: FormData): Promise<serverActi
             value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjk5OTk5OTk5OTl9.VA8uF5pXI9_HNVSUJdOAVCzeS5CUltV5znCK6FnGg8Q',
             expires: new Date(Date.now() + 600 * 60 * 1000)// 한국: GMT +9 = 9*60*60
         });
-
-        const error = issueFcmToken();
-        if (error) {
-            console.log(error);
-        }
 
         redirect('/home');
     }
@@ -83,12 +77,6 @@ export async function signin(_: unknown, formData: FormData): Promise<serverActi
             value: decodeURIComponent(cookieInfo[1]),
             expires: new Date((decoded.exp + 9 * 60 * 60) * 1000) // 한국: GMT +9 = 9*60*60
         });
-    }
-
-    // FCM 토큰 발급
-    const error = issueFcmToken();
-    if (error) {
-        console.log(error);
     }
 
     redirect('/home');

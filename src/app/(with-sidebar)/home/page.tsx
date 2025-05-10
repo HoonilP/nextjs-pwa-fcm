@@ -1,6 +1,23 @@
 'use client';
 
+// Context
+import { useUser } from "@/context/UserProvider";
+
+// FCM
+import { issueFcmToken } from "@/utils/fcmToken";
+
+// React
+import { useEffect } from "react";
+
 export default function Home() {
+    // UserContext
+    const { username, userRole } = useUser();
+
+    // FCM Token
+    useEffect(() => {
+        issueFcmToken(userRole);
+    }, []);
+
     return (
         <div>
             <div>
