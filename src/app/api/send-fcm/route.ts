@@ -3,7 +3,6 @@ import * as admin from "firebase-admin";
 import { ServiceAccount } from "firebase-admin";
 import { MulticastMessage } from "firebase-admin/messaging";
 
-// 푸시 데이터 인터페이스
 interface NotificationData {
     data: {
         title: string;
@@ -13,32 +12,29 @@ interface NotificationData {
     }
 }
 
-// FCM 푸시 발송 함수
 const sendFCMNotification = async (data: NotificationData) => {
-    // Firebase Admin SDK 초기화
     const serviceAccount: ServiceAccount = {
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
         privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
     };
 
-    // 한 번만 초기화
     if (!admin.apps.length) {
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount),
         });
     }
 
-    // Admin SDK를 사용하여 Firestore 접근
     const db = admin.firestore();
     let tokenList: string[] = [];
 
-    // 토큰 목록 가져오기
     try {
-        const docSnap = await db.collection('subscribe').doc('tokens').get();
-
-        if (docSnap.exists) {
-            tokenList = docSnap.data()?.list || [];
+        const docRefs = ['admin', 'commitee', 'student'];
+        for (const role of docRefs) {
+            const docSnap = await db.collection('fcmToken').doc(role).get();
+            if (docSnap.exists) {
+                tokenList = [...tokenList, ...(docSnap.data()?.list || [])];
+            }
         }
     } catch (error) {
         console.error("토큰 목록 가져오기 오류:", error);
@@ -50,13 +46,11 @@ const sendFCMNotification = async (data: NotificationData) => {
     }
 
     try {
-        // 푸시 메시지 구성
         const message: MulticastMessage = {
             data: data.data,
             tokens: tokenList
         };
 
-        // 최신 방식인 sendEachForMulticast 사용
         const response = await admin
             .messaging()
             .sendEachForMulticast(message);
@@ -72,7 +66,6 @@ const sendFCMNotification = async (data: NotificationData) => {
     }
 };
 
-// POST 요청 핸들러
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
