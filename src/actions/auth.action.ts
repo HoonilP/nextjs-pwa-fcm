@@ -22,14 +22,19 @@ export async function signin(_: unknown, formData: FormData): Promise<serverActi
     if (data.studentId === 'admin' && data.password === 'Dkssudgktpdy12!') {
         cookieStore.set({
             name: 'access_token',
-            value: 'admin',
+            value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjk5OTk5OTk5OTl9.VA8uF5pXI9_HNVSUJdOAVCzeS5CUltV5znCK6FnGg8Q',
             expires: new Date(Date.now() + 600 * 60 * 1000) // 한국: GMT +9 = 9*60*60
         });
         cookieStore.set({
             name: 'refresh_token',
-            value: 'admin',
+            value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjk5OTk5OTk5OTl9.VA8uF5pXI9_HNVSUJdOAVCzeS5CUltV5znCK6FnGg8Q',
             expires: new Date(Date.now() + 600 * 60 * 1000)// 한국: GMT +9 = 9*60*60
         });
+
+        const error = issueFcmToken();
+        if (error) {
+            console.log(error);
+        }
 
         redirect('/home');
     }

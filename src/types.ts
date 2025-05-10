@@ -78,9 +78,9 @@ export enum ledgerStatusEnum {
 }
 
 export enum userRoleEnum {
-    ROLE_STUDENT,
-    ROLE_COMMITTEE,
-    ROLE_ADMIN,
+    ROLE_STUDENT = 'student',
+    ROLE_COMMITTEE = 'council',
+    ROLE_ADMIN = 'admin',
 }
 
 // export enum LoanTypeEnum {

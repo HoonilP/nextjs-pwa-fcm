@@ -7,15 +7,15 @@ import { jwtDecode } from 'jwt-decode';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 // Types
-import { JwtData } from '@/types';
+import { JwtData, userRoleEnum } from '@/types';
 
 type UserContextType = {
-	userRole: number;
+	userRole: userRoleEnum;
 	username: string;
 };
 
 const defaultValue: UserContextType = {
-	userRole: 9999,
+	userRole: userRoleEnum.ROLE_ADMIN,
 	username: 'admin',
 };
 
@@ -24,7 +24,7 @@ export const UserContext = createContext<UserContextType>(defaultValue);
 export const useUser = () => useContext(UserContext);
 
 export function UserProvider({ children }: { children: ReactNode }) {
-	const [userRole, setUserRole] = useState(0);
+	const [userRole, setUserRole] = useState<userRoleEnum>(userRoleEnum.ROLE_ADMIN);
 	const [username, setUsername] = useState('');
 
 	useEffect(() => {
@@ -33,7 +33,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 				const res = await fetch('/api/auth/accessToken');
 				const data = await res.json();
 				if (data.token === 'admin') {
-					setUserRole(9999);
+					setUserRole(userRoleEnum.ROLE_ADMIN);
 					setUsername('ADMIN');
 					return;
 				}

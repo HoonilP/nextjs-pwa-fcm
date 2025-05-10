@@ -35,23 +35,25 @@ export async function issueFcmToken() {
 
     const docRef = doc(db, "fcmToken", roleToDocRef[userRole]);
 
-    const savedToken = localStorage.getItem('fcmToken');
+    // 쿠키에서 기존 토큰을 가져와서 삭제
+    const savedToken = cookieStore.get('fcmToken')?.value;
     if (savedToken) {
         await updateDoc(docRef, {
             list: arrayRemove(savedToken),
         }).then(() => {
-            localStorage.removeItem('fcmtoken');
+            cookieStore.delete('fcmToken');
         }).catch((error) => {
             return error;
         });
     }
 
+    // 새로운 토큰을 발급받아서 쿠키에 저장
     const newToken = await issueToken();
     if (newToken) {
         await updateDoc(docRef, {
             list: arrayUnion(newToken),
         }).then(() => {
-            localStorage.setItem('fcmToken', newToken);
+            cookieStore.set('fcmToken', newToken); // 쿠키에 새로운 토큰 저장
         }).catch((error) => {
             return error;
         });
@@ -72,12 +74,13 @@ export async function removeFcmToken() {
 
     const docRef = doc(db, "fcmToken", roleToDocRef[userRole]);
 
-    const savedToken = localStorage.getItem('fcmToken');
+    // 쿠키에서 기존 토큰을 가져와서 삭제
+    const savedToken = cookieStore.get('fcmToken')?.value;
     if (savedToken) {
         await updateDoc(docRef, {
             list: arrayRemove(savedToken),
         }).then(() => {
-            localStorage.removeItem('fcmtoken');
+            cookieStore.delete('fcmToken'); // 쿠키에서 삭제
         }).catch((error) => {
             return error;
         });
