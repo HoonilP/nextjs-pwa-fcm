@@ -25,17 +25,9 @@ export const signupFormSchema = z.object({
         .regex(/^(010)-\d{4}-\d{4}$/),
     password: z
         .string()
-        // .min(10, "비밀번호는 10자리 이상이어야 합니다.")
-        // .max(20, '비밀번호는 20자리 이하이어야 합니다')
-        // .regex(/[A-Z]/, "비밀번호에 대문자가 포함되어야 합니다.")
-        // .regex(/[!@#$%^&*(),.?":{}|<>]/, "비밀번호에 특수문자가 포함되어야 합니다."),
         .regex(/(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{8,20}/, "비밀번호는 영문 대소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다."),
     confirmPassword: z
         .string()
-        // .min(8, "비밀번호는 8자리 이상이어야 합니다.")
-        // .max(20, '비밀번호는 20자리 이하이어야 합니다')
-        // .regex(/[A-Z]/, "비밀번호에 대문자가 포함되어야 합니다.")
-        // .regex(/[!@#$%^&*(),.?":{}|<>]/, "비밀번호에 특수문자가 포함되어야 합니다."),
         .regex(/(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{8,20}/, "비밀번호는 영문 대소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다."),
     studentId: z
         .string()
@@ -53,17 +45,44 @@ export interface serverActionMessage {
 
 import { JwtPayload } from "jwt-decode";
 export interface JwtData extends JwtPayload {
-    role: number;
-    userName: string;
+    role: userRoleEnum;
+    username: string;
     exp: number;
     iat: number;
+}
+
+export interface ledgerDataSchema {
+    id: number;
+    theme: string;
+    amount: number;
+    status: ledgerStatusEnum;
+    approvedBy: string;
+    createdBy: string;
+    creatorName: string;
+    expiryTime: string;
+    description: string;
+    approvals: string[];
+    rejections: string[];
+    documentUrl: string;
 }
 
 export interface ChatProps {
     channelUrl: string;
 }
 
-// // Enum
+// Enum
+export enum ledgerStatusEnum {
+    COMPLETE = 'complete',
+    PENDING = 'pending',
+    FAILED = 'failed',
+}
+
+export enum userRoleEnum {
+    ROLE_STUDENT,
+    ROLE_COMMITTEE,
+    ROLE_ADMIN,
+}
+
 // export enum LoanTypeEnum {
 // 	special_loan,
 // 	group_loan,

@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { JwtData } from "@/types";
 import { jwtDecode } from "jwt-decode";
+import { issueFcmToken } from "./utils/fcmToken";
 
 export async function middleware(request: NextRequest) {
     console.log("Middleware: start");
@@ -100,6 +101,11 @@ async function rotateAccessToken(refreshToken: string) {
                 value: decodeURIComponent(cookieInfo[1]),
                 expires: new Date((decoded.exp + 9 * 60 * 60) * 1000), // GMT+9
             });
+        }
+
+        const error = issueFcmToken();
+        if (error) {
+            console.log(`Middleware: issueFcmToken() / ${error}`);
         }
 
         return true;

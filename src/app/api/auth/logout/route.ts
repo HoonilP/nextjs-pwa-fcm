@@ -1,3 +1,4 @@
+import { removeFcmToken } from '@/utils/fcmToken';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
@@ -25,6 +26,10 @@ export async function GET() {
 
     cookieStore.delete('access_token');
     cookieStore.delete('refresh_token');
+    const error = removeFcmToken();
+    if (error) {
+        console.log(`/api/logout: removeFcmToken() / ${error}`);
+    }
 
     return NextResponse.json({ ok: true });
 }
