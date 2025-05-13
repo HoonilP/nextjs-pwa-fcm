@@ -39,8 +39,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
 				}
 				if (data.token) {
 					const decoded: JwtData = jwtDecode(data.token);
+					console.log(`Context: ${decoded}`)
 					setUserRole(decoded.role);
-					setUsername(decoded.username);
+					setUsername(decoded.studentId);
 				}
 			} catch (err) {
 				console.error("Failed to decode token:", err);

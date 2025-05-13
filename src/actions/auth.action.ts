@@ -4,6 +4,10 @@
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
 
+// Firebase
+import * as admin from "firebase-admin";
+import { ServiceAccount } from "firebase-admin";
+
 // Types
 import { signinFormSchema, signupFormSchema, JwtData, serverActionMessage } from "@/types";
 import { jwtDecode } from "jwt-decode";
@@ -60,11 +64,8 @@ export async function signin(_: unknown, formData: FormData): Promise<serverActi
         credentials: 'include',
     });
 
-    const responseData = await response.json();
-    console.log(responseData)
     if (!response.ok) {
-        console.log(`statusCode: ${response.status}\nstatusMessage: ${responseData.error}`)
-        throw new Error('로그인에 실패하였습니다. 다시 시도해주세요.');
+        console.log('로그인에 실패하였습니다. 다시 시도해주세요.');
     }
 
     // 'use server'; 때문에 쿠키가 client로 저장되지 않음
@@ -83,9 +84,6 @@ export async function signin(_: unknown, formData: FormData): Promise<serverActi
 }
 
 export async function signup(_: unknown, formData: FormData): Promise<serverActionMessage> {
-    const cookieStore = await cookies();
-    const credentials = cookieStore.get('access_token')?.value;
-
     const data = {
         username: formData.get('username'),
         email: formData.get('email'),
@@ -93,7 +91,7 @@ export async function signup(_: unknown, formData: FormData): Promise<serverActi
         password: formData.get('password'),
         confirmPassword: formData.get('confirmPassword'),
         studentId: formData.get('studentId'),
-        role: formData.get('role') === 'on' ? 'COMMITTEE' : 'STUDENT',
+        role: formData.get('role') === 'on' ? 'ROLE_COMMITTEE' : 'ROLE_STUDENT',
     }
 
     try {
@@ -112,24 +110,107 @@ export async function signup(_: unknown, formData: FormData): Promise<serverActi
         };
     }
 
-    const response = await fetch(`${process.env.API_SERVER_URL}/api/auth/signup`, {
+    const response = await fetch(`${process.env.API_SERVER_URL}/signup`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${credentials}`
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
     });
 
-    console.log(response.json())
-
     if (!response.ok) {
-        console.log(`statusCode: ${response.status}\nstatusMessage: ${response.statusText}`)
-        throw new Error('회원가입에 실패하였습니다. 다시 시도해주세요.');
+        if (response.status === 400) {
+            return {
+                status: 400,
+                message: '이미 회원가입된 계정입니다. 로그인을 진행해주세요.'
+            }
+        }
+        console.log('회원가입에 실패하였습니다. 다시 시도해주세요.');
     }
+
+    const userId = `${data.studentId}_${data.username}_${data.role === 'ROLE_STUDENT' ? '학생' : '학생회'}`;
+    const sendbirdResponse = await fetch(`https://api-${process.env.SENDBIRD_APP_ID}.sendbird.com/v3/users`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Api-Token': `${process.env.SENDBIRD_API_TOKEN}`
+        },
+        body: JSON.stringify({
+            user_id: userId,
+            nickname: userId,
+            profile_url: '',
+            profile_file: btoa(''),
+        }),
+    });
+
+    if (!sendbirdResponse.ok) {
+        console.log('채팅 회원가입에 실패');
+        return {
+            status: 400,
+            message: '채팅 회원가입에 실패하였습니다. 관리자에게 문의하세요.'
+        }
+    }
+
+    const channelURL = data.role === 'ROLE_STUDENT' ? process.env.NEXT_PUBLIC_SENDBIRD_STUDENT_CHATROOM : process.env.NEXT_PUBLIC_SENDBIRD_COUNCIL_CHATROOM;
+    const sendbirdResponse2 = await fetch(`https://api-${process.env.SENDBIRD_APP_ID}.sendbird.com/v3/group_channels/${channelURL}/join`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Api-Token': `${process.env.SENDBIRD_API_TOKEN}`
+        },
+        body: JSON.stringify({
+            user_id: userId,
+        }),
+    });
+
+    if (!sendbirdResponse2.ok) {
+        console.log('유저 채팅방 가입 실패');
+        return {
+            status: 400,
+            message: '유저 채팅방 가입에 실패하였습니다. 관리자에게 문의하세요.'
+        }
+    }
+
+    const sendbirdResponse3 = await fetch(`https://api-${process.env.SENDBIRD_APP_ID}.sendbird.com/v3/group_channels/${process.env.NEXT_PUBLIC_SENDBIRD_ALL_CHATROOM}/join`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Api-Token': `${process.env.SENDBIRD_API_TOKEN}`
+        },
+        body: JSON.stringify({
+            user_id: userId,
+        }),
+    });
+
+    if (!sendbirdResponse3.ok) {
+        console.log('전체 채팅방 가입 실패');
+        return {
+            status: 400,
+            message: '전체 채팅방 가입에 실패하였습니다. 관리자에게 문의하세요.'
+        }
+    }
+
+    const serviceAccount: ServiceAccount = {
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    };
+
+    if (!admin.apps.length) {
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount),
+        });
+    }
+
+    const db = admin.firestore();
+
+    const userRef = db.collection('users').doc();
+    await userRef.set({
+        sendBirdUserId: userId,
+        studentId: data.studentId,
+        uuid: userRef.id,
+    });
 
     return {
         status: 200,
-        message: '회원가입 요청이 성공적으로 완료되었습니다. 관리자의 승인이 있을 때까지 기다려주세요.',
+        message: '회원가입 요청이 성공적으로 완료되었습니다. 승인이 완료될 때까지 기다려주세요.',
     }
 }

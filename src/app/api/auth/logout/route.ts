@@ -11,14 +11,18 @@ export async function GET() {
         return NextResponse.json({ ok: true })
     }
 
-    const response = await fetch(`${process.env.API_SERVER_URL}/auth/logout`, {
+    const response = await fetch(`${process.env.API_SERVER_URL}/api/auth/logout`, {
         method: 'POST',
+        // credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${credentials}`
         },
     });
-
+    
+    console.log(response.ok)
+    console.log(response.statusText)
+    console.log(await response.text())
     if (!response.ok) {
         return NextResponse.json({ ok: false });
     }

@@ -13,8 +13,10 @@ import { toast } from "sonner";
 
 // React
 import { useActionState, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function SignUpForm() {
+    const router = useRouter();
     const [formData, setFormData] = useState({ studentId: '', username: '', password: '', confirmPassword: '', phoneNumber: '', email: '' });
 
     // Server Action
@@ -23,6 +25,7 @@ export function SignUpForm() {
         if (state === null) return;
         if (state.status === 200) {
             toast.success(state.message);
+            router.push('signin');
         } else {
             state.message.split('\n').map((message) => toast.error(message));
         }

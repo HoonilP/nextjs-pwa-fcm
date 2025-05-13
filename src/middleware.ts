@@ -14,6 +14,7 @@ export async function middleware(request: NextRequest) {
 
     const accessToken = request.cookies.get("access_token")?.value;
     const refreshToken = request.cookies.get("refresh_token")?.value;
+    // console.log(`Middleware refreshToken: ${refreshToken}`);
 
     if (accessToken === 'admin' && refreshToken === 'admin') {
         console.log('You are Admin! :)');
@@ -82,9 +83,12 @@ async function rotateAccessToken(refreshToken: string) {
         const response = await fetch(`${process.env.API_SERVER_URL}/api/auth/reissue`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ refresh: refreshToken }),
+            body: JSON.stringify({ refresh_token: refreshToken }),
         });
 
+        console.log(response.ok)
+        console.log(response.statusText)
+        console.log(await response.text())
         if (!response.ok) {
             console.error("Failed to rotate access token:", response.status);
             return false;
@@ -113,5 +117,6 @@ export const config = {
     matcher: [
         "/signin/:path*",
         "/home/:path*",
+        "/search/:path*",
     ],
 };

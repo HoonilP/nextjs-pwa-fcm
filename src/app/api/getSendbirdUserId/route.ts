@@ -14,12 +14,11 @@ import { JwtData } from '@/types';
 
 export async function GET() {
     const cookieStore = await cookies();
-    // const accessToken = cookieStore.get('access_token')?.value;
-    // const decoded: JwtData = jwtDecode(String(accessToken));
-
+    const accessToken = cookieStore.get('access_token')?.value;
+    const decoded: JwtData = jwtDecode(String(accessToken));
+    
     const userRef = collection(db, 'users');
-    // const q = query(userRef, where('username', '==', decoded.userName));
-    const q = query(userRef, where('username', '==', '202215056'));
+    const q = query(userRef, where('studentId', '==', decoded.studentId));
     const querySnapshot = await getDocs(q);
 
     let sendbirdUserId;

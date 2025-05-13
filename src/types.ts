@@ -46,24 +46,17 @@ export interface serverActionMessage {
 import { JwtPayload } from "jwt-decode";
 export interface JwtData extends JwtPayload {
     role: userRoleEnum;
-    username: string;
+    studentId: string;
     exp: number;
     iat: number;
 }
 
 export interface ledgerDataSchema {
-    id: number;
+    currentBalance: number;
+    lastUpdated: number;
     theme: string;
-    amount: number;
-    status: ledgerStatusEnum;
-    approvedBy: string;
-    createdBy: string;
-    creatorName: string;
-    expiryTime: string;
-    description: string;
-    approvals: string[];
-    rejections: string[];
-    documentUrl: string;
+    totalDeposit: number;
+    totalWithdraw: number;
 }
 
 export interface ChatProps {
@@ -78,7 +71,7 @@ export enum ledgerStatusEnum {
 }
 
 export enum userRoleEnum {
-    ROLE_STUDENT = 'student',
-    ROLE_COMMITTEE = 'council',
-    ROLE_ADMIN = 'admin',
+    ROLE_STUDENT = 'ROLE_STUDENT',
+    ROLE_COMMITTEE = 'ROLE_COMMITTEE',
+    ROLE_ADMIN = 'ROLE_ADMIN',
 }
