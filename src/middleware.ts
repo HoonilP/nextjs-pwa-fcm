@@ -118,5 +118,6 @@ export const config = {
         "/signin/:path*",
         "/home/:path*",
         "/search/:path*",
+        "/personnel-search/:path*",
     ],
 };

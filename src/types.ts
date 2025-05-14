@@ -59,6 +59,16 @@ export interface ledgerDataSchema {
     totalWithdraw: number;
 }
 
+export interface personnelDataSchema {
+    sendBirdUserId: string;
+    studentId: string;
+    uuid: string;
+    username: string;
+    email: string;
+    phoneNumber: string;
+    role: string;
+}
+
 export interface ChatProps {
     channelUrl: string;
 }

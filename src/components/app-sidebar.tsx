@@ -69,9 +69,9 @@ const data = {
 			icon: Search,
 			items: [
 				{ title: "전체 내역", url: "/search/all" },
-				{ title: "입금 내역", url: "/search/credit" },
-				{ title: "출금 내역", url: "/search/debit" },
-				{ title: "나의 내역", url: "/search/personal" },
+				{ title: "입금 내역", url: "/search/deposit" },
+				{ title: "출금 내역", url: "/search/withdrawal" },
+				{ title: "나의 내역", url: "/search/my" },
 				{ title: "테마별 내역", url: "/search/theme" },
 			],
 		},

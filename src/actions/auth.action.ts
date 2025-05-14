@@ -207,6 +207,11 @@ export async function signup(_: unknown, formData: FormData): Promise<serverActi
         sendBirdUserId: userId,
         studentId: data.studentId,
         uuid: userRef.id,
+        // 시연 영상용 data
+        username: data.username,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        role: data.role === 'ROLE_STUDENT' ? 'student' : 'committee',
     });
 
     return {
