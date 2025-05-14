@@ -32,7 +32,7 @@ const data = {
 			url: "#",
 			icon: ListChecks,
 			items: [
-				{ title: "학생회 가입 요청", url: "/approve/council" },
+				{ title: "학생회 가입 요청", url: "/approve/committee" },
 				{ title: "학생 가입 요청", url: "/approve/student" },
 				{ title: "입금 내역", url: "/approve/credit" },
 				{ title: "출금 내역", url: "/approve/debit" },
@@ -59,8 +59,8 @@ const data = {
 			url: "#",
 			icon: Search,
 			items: [
-				{ title: "학생회 조회", url: "/search/council" },
-				{ title: "학생 조회", url: "/search/student" },
+				{ title: "학생회 조회", url: "/personnel-search/committee" },
+				{ title: "학생 조회", url: "/personnel-search/student" },
 			],
 		},
 		{
@@ -86,7 +86,7 @@ const data = {
 	],
 	menus: [
 		{ name: "전체 채팅방", url: "/chat/all", icon: MessageCircle },
-		{ name: "학생회 채팅방", url: "/chat/council", icon: MessageCircle },
+		{ name: "학생회 채팅방", url: "/chat/committee", icon: MessageCircle },
 		{ name: "학생 채팅방", url: "/chat/student", icon: MessageCircle },
 	],
 }
@@ -94,21 +94,25 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	const { username, userRole } = useUser();
 
-	const filteredNavMain = data.navMain.map(nav => {
-		if (nav.title === "Overdue") {
-			return {
-				...nav,
-				items: nav.items.filter(item =>
-					userRole === userRoleEnum.ROLE_COMMITTEE || item.title !== "Registration"
-				),
-			};
-		}
-		return nav;
-	});
+	const filteredNavMain = data.navMain
+		.map(nav => {
+			if (nav.title === "Admin") {
+				if (userRole !== userRoleEnum.ROLE_ADMIN) {
+					return null;
+				}
+			}
+			return nav;
+		}).filter((nav) => nav !== null);
 
-	const filteredMenus = data.menus.filter(
-		menu => userRole !== userRoleEnum.ROLE_STUDENT || !["User", "HR", "Report"].includes(menu.name)
-	);
+	const filteredMenus = data.menus.filter(menu => {
+		if (userRole === userRoleEnum.ROLE_COMMITTEE && menu.name === "학생 채팅방") {
+			return false;
+		}
+		if (userRole === userRoleEnum.ROLE_STUDENT && menu.name === "학생회 채팅방") {
+			return false;
+		}
+		return true;
+	});
 
 	return (
 		<Sidebar collapsible="icon" {...props}>
