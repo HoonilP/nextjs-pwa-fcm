@@ -38,7 +38,7 @@ export function SigninForm() {
                     </div>
                     <PasswordInput disabled={isPending} name="password" required />
                 </div>
-                <Button type="submit" className="w-full">로그인</Button>
+                <Button disabled={isPending} type="submit" className="w-full">로그인</Button>
             </div>
         </form>
     )

@@ -81,7 +81,7 @@ export function SignUpForm() {
                         </div>
                     </div>
                 </div>
-                <Button type="submit" className="w-full">회원가입</Button>
+                <Button disabled={isPending} type="submit" className="w-full">회원가입</Button>
             </div>
         </form>
     )
