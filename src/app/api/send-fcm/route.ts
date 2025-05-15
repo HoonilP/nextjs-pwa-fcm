@@ -29,7 +29,7 @@ const sendFCMNotification = async (data: NotificationData) => {
     let tokenList: string[] = [];
 
     try {
-        const docRefs = ['admin', 'commitee', 'student'];
+        const docRefs = ['ROLE_ADMIN', 'ROLE_COMMITTEE', 'ROLE_STUDENT'];
         for (const role of docRefs) {
             const docSnap = await db.collection('fcmToken').doc(role).get();
             if (docSnap.exists) {

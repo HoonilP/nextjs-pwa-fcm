@@ -23,17 +23,17 @@ export default function Home() {
     const [ledgerData, setLedgerData] = useState<ledgerDataSchema[]>([]);
 
     // FCM Token & Init
-    useEffect(() => {
-        issueFcmToken(userRole);
+    // useEffect(() => {
+    //     issueFcmToken(userRole);
 
-        fetch(`/api/getLedgerBalance?path=all`)
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data.ledgerData);
-                const ledgerData = data.ledgerData;
-                setLedgerData(ledgerData);
-            });
-    }, []);
+    //     fetch(`/api/getLedgerBalance?path=all`)
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             console.log(data.ledgerData);
+    //             const ledgerData = data.ledgerData;
+    //             setLedgerData(ledgerData);
+    //         });
+    // }, []);
 
     return (
         <div className="container mx-auto px-4 py-4">
@@ -46,7 +46,7 @@ export default function Home() {
             <div>
                 승인 요청 상태(Pending, Success, Failed)
             </div>
-            <div>
+            {/* <div>
                 <h1 className="text-4xl font-bold px-4 mb-4">장부 내역</h1>
 
                 <div className="space-y-4">
@@ -66,7 +66,7 @@ export default function Home() {
                         </Card>
                     ))}
                 </div>
-            </div>
+            </div> */}
         </div>
 
     );

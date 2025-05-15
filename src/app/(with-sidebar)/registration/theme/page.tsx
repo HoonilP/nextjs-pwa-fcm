@@ -12,8 +12,8 @@ export default function RegistrationTheme() {
     return (
         <div className="flex flex-col p-10 space-y-8 min-h-screen">
             <h1 className="text-3xl font-bold">테마 등록</h1>
-            <div className="flex justify-between space-x-8">
-                <Card className="w-1/3">
+            <div className="grid grid-cols-1 gap-8">
+                <Card className="w-full">
                     <CardHeader>
                         <CardTitle className="text-green-800">테마를 등록하세요</CardTitle>
                     </CardHeader>
@@ -38,7 +38,7 @@ export default function RegistrationTheme() {
                     </CardFooter>
                 </Card>
 
-                <Card className="w-2/3">
+                <Card className="w-full">
                     <CardHeader>
                         <div className="flex justify-between items-center">
                             <CardTitle className="text-green-800">테마 목록</CardTitle>

@@ -37,7 +37,7 @@ export function NavUser({ username, userRole }: {
 				removeFcmToken(userRole);
 				router.push('/signin');
 			} else {
-				toast.error("Logout failed. Please try again later.");
+				toast.error("로그아웃 실패. 다시 시도해주세요.");
 				setIsDialogOpen(false);
 			}
 		});
@@ -76,11 +76,11 @@ export function NavUser({ username, userRole }: {
 						<DialogContent>
 							<DialogHeader>
 								<DialogTitle>Logout</DialogTitle>
-								<DialogDescription>Are you sure you want to log out?</DialogDescription>
+								<DialogDescription>로그아웃 하실건가요?</DialogDescription>
 							</DialogHeader>
 							<DialogFooter>
-								<Button variant="secondary" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-								<Button onClick={handleLogout} className="bg-red-600 text-white hover:bg-red-700">Confirm</Button>
+								<Button variant="secondary" onClick={() => setIsDialogOpen(false)}>취소</Button>
+								<Button onClick={handleLogout} className="bg-red-600 text-white hover:bg-red-700">로그아웃</Button>
 							</DialogFooter>
 						</DialogContent>
 					</Dialog>

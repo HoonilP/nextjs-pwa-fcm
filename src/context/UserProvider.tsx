@@ -35,7 +35,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 			try {
 				const res = await fetch('/api/auth/accessToken');
 				const data = await res.json();
-				if (data.token === 'admin') {
+				if (data.token === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjk5OTk5OTk5OTl9.VA8uF5pXI9_HNVSUJdOAVCzeS5CUltV5znCK6FnGg8Q') {
 					setUserRole(userRoleEnum.ROLE_ADMIN);
 					setUserId('ADMIN');
 					setUsername('Administrator');
