@@ -75,9 +75,6 @@ export function SignUpForm() {
                             <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                                 저는 학생회 입니다.
                             </label>
-                            <p className="text-sm text-muted-foreground">
-                                You agree to our Terms of Service and Privacy Policy.
-                            </p>
                         </div>
                     </div>
                 </div>

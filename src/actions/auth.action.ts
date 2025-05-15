@@ -141,6 +141,7 @@ export async function signup(_: unknown, formData: FormData): Promise<serverActi
         }),
     });
 
+    console.log(`채팅 회원가입: ${await sendbirdResponse.text()}`)
     if (!sendbirdResponse.ok) {
         console.log('채팅 회원가입에 실패');
         return {
