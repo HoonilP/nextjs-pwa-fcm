@@ -126,85 +126,85 @@ export async function signup(_: unknown, formData: FormData): Promise<serverActi
         console.log('회원가입에 실패하였습니다. 다시 시도해주세요.');
     }
 
-    // const userId = `${data.studentId}_${data.username}_${data.role === 'ROLE_STUDENT' ? '학생' : '학생회'}`;
-    // const sendbirdResponse = await fetch(`https://api-${process.env.SENDBIRD_APP_ID}.sendbird.com/v3/users`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Api-Token': `${process.env.SENDBIRD_API_TOKEN}`
-    //     },
-    //     body: JSON.stringify({
-    //         user_id: userId,
-    //         nickname: userId,
-    //         profile_url: '',
-    //         profile_file: btoa(''),
-    //     }),
-    // });
+    const userId = `${data.studentId}_${data.username}_${data.role === 'ROLE_STUDENT' ? '학생' : '학생회'}`;
+    const sendbirdResponse = await fetch(`https://api-${process.env.SENDBIRD_APP_ID}.sendbird.com/v3/users`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Api-Token': `${process.env.SENDBIRD_API_TOKEN}`
+        },
+        body: JSON.stringify({
+            user_id: userId,
+            nickname: userId,
+            profile_url: '',
+            profile_file: btoa(''),
+        }),
+    });
 
-    // if (!sendbirdResponse.ok) {
-    //     console.log('채팅 회원가입에 실패');
-    //     return {
-    //         status: 400,
-    //         message: '채팅 회원가입에 실패하였습니다. 관리자에게 문의하세요.'
-    //     }
-    // }
+    if (!sendbirdResponse.ok) {
+        console.log('채팅 회원가입에 실패');
+        return {
+            status: 400,
+            message: '채팅 회원가입에 실패하였습니다. 관리자에게 문의하세요.'
+        }
+    }
 
-    // const channelURL = data.role === 'ROLE_STUDENT' ? process.env.NEXT_PUBLIC_SENDBIRD_STUDENT_CHATROOM : process.env.NEXT_PUBLIC_SENDBIRD_COUNCIL_CHATROOM;
-    // const sendbirdResponse2 = await fetch(`https://api-${process.env.SENDBIRD_APP_ID}.sendbird.com/v3/group_channels/${channelURL}/join`, {
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Api-Token': `${process.env.SENDBIRD_API_TOKEN}`
-    //     },
-    //     body: JSON.stringify({
-    //         user_id: userId,
-    //     }),
-    // });
+    const channelURL = data.role === 'ROLE_STUDENT' ? process.env.NEXT_PUBLIC_SENDBIRD_STUDENT_CHATROOM : process.env.NEXT_PUBLIC_SENDBIRD_COUNCIL_CHATROOM;
+    const sendbirdResponse2 = await fetch(`https://api-${process.env.SENDBIRD_APP_ID}.sendbird.com/v3/group_channels/${channelURL}/join`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Api-Token': `${process.env.SENDBIRD_API_TOKEN}`
+        },
+        body: JSON.stringify({
+            user_id: userId,
+        }),
+    });
 
-    // if (!sendbirdResponse2.ok) {
-    //     console.log('유저 채팅방 가입 실패');
-    //     return {
-    //         status: 400,
-    //         message: '유저 채팅방 가입에 실패하였습니다. 관리자에게 문의하세요.'
-    //     }
-    // }
+    if (!sendbirdResponse2.ok) {
+        console.log('유저 채팅방 가입 실패');
+        return {
+            status: 400,
+            message: '유저 채팅방 가입에 실패하였습니다. 관리자에게 문의하세요.'
+        }
+    }
 
-    // const sendbirdResponse3 = await fetch(`https://api-${process.env.SENDBIRD_APP_ID}.sendbird.com/v3/group_channels/${process.env.NEXT_PUBLIC_SENDBIRD_ALL_CHATROOM}/join`, {
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Api-Token': `${process.env.SENDBIRD_API_TOKEN}`
-    //     },
-    //     body: JSON.stringify({
-    //         user_id: userId,
-    //     }),
-    // });
+    const sendbirdResponse3 = await fetch(`https://api-${process.env.SENDBIRD_APP_ID}.sendbird.com/v3/group_channels/${process.env.NEXT_PUBLIC_SENDBIRD_ALL_CHATROOM}/join`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Api-Token': `${process.env.SENDBIRD_API_TOKEN}`
+        },
+        body: JSON.stringify({
+            user_id: userId,
+        }),
+    });
 
-    // if (!sendbirdResponse3.ok) {
-    //     console.log('전체 채팅방 가입 실패');
-    //     return {
-    //         status: 400,
-    //         message: '전체 채팅방 가입에 실패하였습니다. 관리자에게 문의하세요.'
-    //     }
-    // }
+    if (!sendbirdResponse3.ok) {
+        console.log('전체 채팅방 가입 실패');
+        return {
+            status: 400,
+            message: '전체 채팅방 가입에 실패하였습니다. 관리자에게 문의하세요.'
+        }
+    }
 
-    // const serviceAccount: ServiceAccount = {
-    //     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    //     privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    //     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    // };
+    const serviceAccount: ServiceAccount = {
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    };
 
-    // if (!admin.apps.length) {
-    //     admin.initializeApp({
-    //         credential: admin.credential.cert(serviceAccount),
-    //     });
-    // }
+    if (!admin.apps.length) {
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount),
+        });
+    }
 
     const db = admin.firestore();
 
     const userRef = db.collection('users').doc();
     await userRef.set({
-        // sendBirdUserId: userId,
+        sendBirdUserId: userId,
         studentId: data.studentId,
         uuid: userRef.id,
         // 시연 영상용 data
