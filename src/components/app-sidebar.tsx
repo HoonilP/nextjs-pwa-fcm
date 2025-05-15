@@ -92,7 +92,7 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-	const { username, userRole } = useUser();
+	const { username, userRole, userId } = useUser();
 
 	const filteredNavMain = data.navMain
 		.map(nav => {
