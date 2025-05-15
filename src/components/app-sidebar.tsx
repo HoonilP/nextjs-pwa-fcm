@@ -48,8 +48,8 @@ const data = {
 			icon: PenLine,
 			items: [
 				{ title: "테마 등록", url: "/registration/theme" },
-				{ title: "입금 내역 등록", url: "/registration/credit" },
-				{ title: "출금 내역 등록", url: "/registration/debit" },
+				{ title: "입금 내역 등록", url: "/registration/deposit" },
+				{ title: "출금 내역 등록", url: "/registration/withdrawl" },
 			],
 		},
 		// -- 회원 조회 --

@@ -19,15 +19,15 @@ export default function SearchAll() {
     const [ledgerData, setLedgerData] = useState<ledgerDataSchema[]>([]);
 
     // Fetch Data
-    useEffect(() => {
-        fetch(`/api/getLedgerBalance?path=${path}`)
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data.ledgerData);
-                const ledgerData = data.ledgerData;
-                setLedgerData(ledgerData);
-            });
-    }, []);
+    // useEffect(() => {
+    //     fetch(`/api/getLedgerBalance?path=${path}`)
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             console.log(data.ledgerData);
+    //             const ledgerData = data.ledgerData;
+    //             setLedgerData(ledgerData);
+    //         });
+    // }, []);
 
     // Dynamic Heading
     const getHeading = (path: ParamValue) => {

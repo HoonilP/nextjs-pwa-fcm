@@ -47,6 +47,7 @@ import { JwtPayload } from "jwt-decode";
 export interface JwtData extends JwtPayload {
     role: userRoleEnum;
     studentId: string;
+    username: string;
     exp: number;
     iat: number;
 }
@@ -71,6 +72,12 @@ export interface personnelDataSchema {
 
 export interface ChatProps {
     channelUrl: string;
+}
+
+export interface themeSchema {
+    year: number;
+    semester: 1 | 2;
+    name: string;
 }
 
 // Enum
